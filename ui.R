@@ -12,7 +12,8 @@ shinyUI(fluidPage(
             ),
         mainPanel(
             plotOutput("distPlot"),
-            textOutput("radiosel")
+            textOutput("radiosel"),
+            textOutput("price")
             )
         )
     )
