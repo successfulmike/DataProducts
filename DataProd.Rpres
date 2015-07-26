@@ -1,0 +1,56 @@
+Predict Diamond Prices
+========================================================
+author: Michael Patterson
+date: July 26, 2015
+transition: rotate
+
+First Slide
+========================================================
+The diamond industry is a very lucrative, yet competitive industry. Gain an edge by
+
+- Having the latest data available in real-time
+- Knowing where to best locate diamonds
+- Knowing what to pay per carat in real-time
+
+Actual Use Case
+========================================================
+Say you were presented with the opportunity to quickly (less than 5 seconds) decide whether to buy 3 rough cut diamonds weighing 0.16, 0.27, and 0.34. Buy them now for really cheap the guy says, but what's the REAL value?
+
+Let's load some data to see what the market's typically paying overall.
+
+```{r}
+library(UsingR)
+library(ggplot2)
+data(diamond)
+summary(diamond)
+fit <- lm(price ~ carat, data = diamond)
+coef(fit)
+```
+
+Here's What You Should Pay
+=================================
+```{r}
+fit2 <- lm(price ~ I(carat - mean(carat)), data = diamond)
+fit3 <- lm(price ~ I(carat * 10), data = diamond)
+
+newx <- c(0.16, 0.27, 0.34)
+predict(fit, newdata = data.frame(carat = newx))
+
+```
+
+Plotting Diamond Prices
+========================================================
+
+```{r, echo=FALSE}
+plot(diamond$carat, diamond$price, xlab = "Mass (carats)", ylab = "Price (SIN $)",bg = "lightblue", col = "black", cex = 1.1, pch = 21,frame = FALSE)
+abline(fit, lwd = 2)
+points(diamond$carat, predict(fit), pch = 19, col = "red")
+lines(c(0.16, 0.16, 0.12), c(200, coef(fit)[1] + coef(fit)[2] * 0.16,coef(fit)[1] + coef(fit)[2] * 0.16))
+lines(c(0.27, 0.27, 0.12), c(200, coef(fit)[1] + coef(fit)[2] * 0.27,coef(fit)[1] + coef(fit)[2] * 0.27))
+lines(c(0.34, 0.34, 0.12), c(200, coef(fit)[1] + coef(fit)[2] * 0.34,coef(fit)[1] + coef(fit)[2] * 0.34))
+text(newx+c(0.03, 0, 0), rep(250, 3), labels = newx, pos = 2)
+```
+
+Knowledge is Power
+=========================
+There you have it! When you're equipped with the right information AND what it means, you can tell the difference between bargains and bankruptcy :-)
